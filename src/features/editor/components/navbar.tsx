@@ -15,14 +15,30 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, Redo2, Undo2 } from "lucide-react";
+import {
+  ChevronDown,
+  Download,
+  Redo2,
+  Undo2,
+  MousePointerClick,
+  ArrowRightFromLine,
+} from "lucide-react";
 import { CiFileOn } from "react-icons/ci";
 import { BsCloudCheck } from "react-icons/bs";
 import { Separator } from "@/components/ui/separator";
-import { MousePointerClick } from "lucide-react";
 import HintTooltip from "./hintTooltip";
+import type { ActiveTool } from "../type";
+import { cn } from "@/lib/utils";
 
-export default function navbar() {
+interface SidebarProps {
+  activeTool: ActiveTool;
+  onChangeActiveTool: (tool: ActiveTool) => void;
+}
+
+export default function navbar({
+  activeTool,
+  onChangeActiveTool,
+}: SidebarProps) {
   return (
     <div className="w-full h-[68px] border-b flex items-center p-4 gap-x-8 lg:pl-[24px]">
       <Logo></Logo>
@@ -50,7 +66,11 @@ export default function navbar() {
             <Button
               variant="ghost"
               size="icon"
-              className="text-muted-foreground px-5"
+              className={cn(
+                "text-muted-foreground px-5",
+                activeTool === "select" && "bg-gray-100"
+              )}
+              onClick={() => onChangeActiveTool("select")}
             >
               <MousePointerClick className="size-5 text-black "></MousePointerClick>
             </Button>
@@ -75,11 +95,58 @@ export default function navbar() {
           </HintTooltip>
         </div>
         <Separator orientation="vertical" className="mx-2"></Separator>
-        <div className="flex gap-x-3 items-center">
-          <Button variant="ghost" size="sm" className="text-black">
+        <div className="flex gap-x-4 items-center">
+          <Button variant="ghost" size="sm" className="text-black font-bold">
             <BsCloudCheck className="size-[24px] "></BsCloudCheck>
             <span className="text-xs">保存</span>
           </Button>
+        </div>
+        <div className="ml-auto flex items-center">
+          <DropdownMenu modal={false}>
+            <DropdownMenuTrigger asChild>
+              <Button
+                size="sm"
+                className="font-bold flex items-center"
+                variant="ghost"
+              >
+                <span>导出</span>
+                <Download className="size-4 ml-1"></Download>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="min-w-60">
+              <DropdownMenuItem className="cursor-pointer">
+                <div className="flex gap-x-3 items-start cursor-pointer">
+                  <CiFileOn className="size-9"></CiFileOn>
+                  <div className="flex flex-col gap-y-0.5 items-start">
+                    <p className="font-semibold">JSON</p>
+                    <p className="text-xs text-muted-foreground">
+                      导出JSON格式
+                    </p>
+                  </div>
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                <div className="flex gap-x-3 items-start ">
+                  <CiFileOn className="size-9"></CiFileOn>
+                  <div className="flex flex-col gap-y-0.5 items-start">
+                    <p className="font-semibold">PNG/JPG</p>
+                    <p className="text-xs text-muted-foreground">
+                      导出PNG/JPG格式
+                    </p>
+                  </div>
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                <div className="flex gap-x-3 items-start ">
+                  <CiFileOn className="size-9"></CiFileOn>
+                  <div className="flex flex-col gap-y-0.5 items-start">
+                    <p className="font-semibold">SVG</p>
+                    <p className="text-xs text-muted-foreground">导出SVG格式</p>
+                  </div>
+                </div>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </div>
