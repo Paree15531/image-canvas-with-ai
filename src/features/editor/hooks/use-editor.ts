@@ -1,10 +1,78 @@
-import { RefObject, useCallback, useState } from "react";
+import { RefObject, useCallback, useMemo, useState } from "react";
 import { fabric } from "fabric";
 import { useAutoResize } from "./use-auto-resize";
+import { useRuler } from "../hooks/use-ruler";
+import {
+  CreateShapesMember,
+  SHAPE_CIRCLE,
+  SHAPE_SQUARE,
+  SHAPE_SQUARE_FULL,
+  SHAPE_TRIANGLE,
+  SHAPE_TRIANGLE_ROTATE,
+} from "../shapes-types";
 
 type InitProps = {
   initialContainer: RefObject<HTMLDivElement | null>;
   initialCanvas: fabric.Canvas | null;
+};
+
+const buildShapes = (canvas: fabric.Canvas): CreateShapesMember => {
+  //设置新添加的元素在工作空间中居中
+  const centerFabricObject = (objes: fabric.Object) => {
+    const workspaceInstance = canvas
+      .getObjects()
+      .find((object) => object.name === "workspace") as fabric.Rect;
+
+    if (!workspaceInstance) return;
+    const center = workspaceInstance.getCenterPoint();
+
+    //@ts-ignore
+    canvas._centerObject(objes, center);
+  };
+
+  //添加元素到画布中
+  const addToCanvas = (object: fabric.Object) => {
+    //居中元素到工作空间
+    if (!object) return;
+    centerFabricObject(object);
+    canvas.add(object);
+    canvas.setActiveObject(object);
+  };
+
+  return {
+    addCircle() {
+      const circle = new fabric.Circle({
+        ...SHAPE_CIRCLE,
+      });
+      addToCanvas(circle);
+    },
+    //添加正方形
+    addSquare() {
+      const square = new fabric.Rect({
+        ...SHAPE_SQUARE,
+      });
+      addToCanvas(square);
+    },
+    //添加全屏正方形
+    addSquareFull() {
+      const squareFull = new fabric.Rect({
+        ...SHAPE_SQUARE_FULL,
+      });
+      addToCanvas(squareFull);
+    },
+    addTriangle() {
+      const triangle = new fabric.Triangle({
+        ...SHAPE_TRIANGLE,
+      });
+      addToCanvas(triangle);
+    },
+    addTriangleRotate() {
+      const triangle = new fabric.Triangle({
+        ...SHAPE_TRIANGLE_ROTATE,
+      });
+      addToCanvas(triangle);
+    },
+  };
 };
 
 //创建工作空间
@@ -48,6 +116,16 @@ const useEditor = () => {
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const [containter, setContainer] = useState<HTMLDivElement | null>(null);
 
+  //创建一个useMemo钩子来创建工作空间的成员
+  //这里可以根据需要添加更多的成员或逻辑
+  const createShapesMember = useMemo(() => {
+    if (canvas) {
+      return buildShapes(canvas);
+    }
+    return;
+  }, [canvas]);
+
+  //监听元素大小变化，自适应并居中工作空间元素
   useAutoResize({
     canvas,
     containter,
@@ -75,6 +153,7 @@ const useEditor = () => {
 
   return {
     init,
+    createShapesMember,
   };
 };
 

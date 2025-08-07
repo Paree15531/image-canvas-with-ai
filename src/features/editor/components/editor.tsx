@@ -1,13 +1,21 @@
 "use client";
 import { fabric } from "fabric";
 import { useEditor } from "@/features/editor/hooks/use-editor";
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import Navbar from "./navbar";
 import Sidebar from "./sidebar";
 import Toolbar from "./toolbar";
 import Footer from "./footer";
 import { ActiveTool } from "../type";
 import ShapesSidebar from "./shapes-sidebar";
+import { useRuler } from "../hooks/use-ruler";
+import { useAlignGuidelines } from "../hooks/use-align-guidelines";
 
 export default function Editor() {
   //声明工具选中的类型
@@ -31,7 +39,7 @@ export default function Editor() {
 
   const editorCanvasRef = useRef<HTMLCanvasElement>(null);
   const workspaceRef = useRef<HTMLDivElement>(null);
-  const { init } = useEditor();
+  const { init, createShapesMember } = useEditor();
 
   useLayoutEffect(() => {
     if (!editorCanvasRef.current) return;
@@ -39,6 +47,8 @@ export default function Editor() {
       controlsAboveOverlay: true,
       preserveObjectStacking: true,
     });
+
+    useAlignGuidelines(fabricCanvas);
 
     init({
       initialCanvas: fabricCanvas,
@@ -50,6 +60,12 @@ export default function Editor() {
     };
   }, [init]);
 
+  useEffect(() => {
+    if (workspaceRef?.current) {
+      useRuler(workspaceRef.current);
+    }
+  }, []);
+
   return (
     <div className="h-full flex flex-col">
       <Navbar activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
@@ -59,13 +75,14 @@ export default function Editor() {
           onChangeActiveTool={onChangeActiveTool}
         />
         <ShapesSidebar
+          createShapesMember={createShapesMember}
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
         />
-        <main className=" bg-muted flex-1 overflow-auto relative flex flex-col">
+        <main className="bg-muted flex-1 overflow-auto relative flex flex-col overflow-y-scroll">
           <Toolbar />
           <div
-            className="flex-1 h-[cacl(100%-124px)] bg-muted"
+            className="flex-1 h-[cacl(100%-124px)] bg-muted relative"
             ref={workspaceRef}
           >
             <canvas ref={editorCanvasRef}></canvas>
