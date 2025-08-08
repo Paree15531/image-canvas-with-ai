@@ -51,7 +51,7 @@ export default function sidebar({
         ></SidebarItem>
         <SidebarItem
           Icon={Shapes}
-          label="形状"
+          label="造型"
           isActive={activeTool == "shapes"}
           onClick={() => onChangeActiveTool("shapes")}
         ></SidebarItem>
@@ -63,7 +63,7 @@ export default function sidebar({
         ></SidebarItem>
         <SidebarItem
           Icon={Type}
-          label="字形"
+          label="文字"
           isActive={activeTool === "text"}
           onClick={() => onChangeActiveTool("text")}
         ></SidebarItem>
