@@ -16,6 +16,7 @@ import { ActiveTool } from "../type";
 import ShapesSidebar from "./shapes-sidebar";
 import { useRuler } from "../hooks/use-ruler";
 import { useAlignGuidelines } from "../hooks/use-align-guidelines";
+import FillColorSideBar from "./fill-color-sidebar";
 
 export default function Editor() {
   //声明工具选中的类型
@@ -39,7 +40,7 @@ export default function Editor() {
 
   const editorCanvasRef = useRef<HTMLCanvasElement>(null);
   const workspaceRef = useRef<HTMLDivElement>(null);
-  const { init, editor, editorObjectsStyle, canvas } = useEditor();
+  const { init, editor } = useEditor();
 
   useLayoutEffect(() => {
     if (!editorCanvasRef.current) return;
@@ -60,11 +61,11 @@ export default function Editor() {
     };
   }, [init]);
 
-  useEffect(() => {
-    if (workspaceRef?.current) {
-      useRuler(workspaceRef.current);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (workspaceRef?.current) {
+  //     useRuler(workspaceRef.current);
+  //   }
+  // }, []);
 
   return (
     <div className="h-full flex flex-col">
@@ -79,13 +80,17 @@ export default function Editor() {
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
         />
+        <FillColorSideBar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        ></FillColorSideBar>
         <main className="bg-muted flex-1 overflow-auto relative flex flex-col overflow-y-scroll">
           <Toolbar
             activeTool={activeTool}
-            canvas={canvas}
             onChangeActiveTool={onChangeActiveTool}
-            editorObjectsStyle={editorObjectsStyle}
-            key={JSON.stringify(canvas?.getActiveObject())}
+            editor={editor}
+            key={JSON.stringify(editor?.canvas.getActiveObject())}
           />
           <div
             className="flex-1 h-[cacl(100%-124px)] bg-muted relative"

@@ -213,7 +213,6 @@ const useEditor = () => {
   return {
     init,
     editor,
-    canvas,
   };
 };
 

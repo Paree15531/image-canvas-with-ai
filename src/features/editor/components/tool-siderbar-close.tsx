@@ -17,7 +17,7 @@ export default function toolSiderbarClose({
       onClick={onClose}
       variant="ghost"
       className={cn(
-        "absolute -right-[1.80rem] h-[60px] bg-white z-[9999] top-1/2 transform -translate-y-1/2  flex items-center justify-center rounded-r-xl px-1 pr-2 border-r gruop",
+        "absolute -right-[1.80rem] h-[60px] bg-white z-[50] top-1/2 transform -translate-y-1/2  flex items-center justify-center rounded-r-xl px-1 pr-2 border-r gruop",
         !isHidden ? "pointer-events-none" : "pointer-events-auto"
       )}
     >

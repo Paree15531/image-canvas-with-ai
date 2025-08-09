@@ -45,8 +45,8 @@ export interface Editor {
   canvas: fabric.Canvas;
 }
 
-export const FILL_COLOR = "rgba(0,0,0,0)";
-export const STROKE_COLOR = "rgba(0,0,0,0)";
+export const FILL_COLOR = "rgba(0,0,0)";
+export const STROKE_COLOR = "rgba(0,0,0)";
 export const STROKE_WIDTH = 1;
 
 export const SHAPE_CIRCLE = {

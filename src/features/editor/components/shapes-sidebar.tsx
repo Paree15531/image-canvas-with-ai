@@ -1,5 +1,5 @@
 import React from "react";
-import type { ActiveTool } from "../type";
+import type { ActiveTool, Editor } from "../type";
 import { cn } from "@/lib/utils";
 import ToolSiderHeader from "./tool-sidebar-header";
 import ToolSiderbarClose from "./tool-siderbar-close";
@@ -8,12 +8,11 @@ import ShapeTool from "./shape-tool";
 import { FaCircle, FaSquare, FaSquareFull } from "react-icons/fa";
 import { IoTriangle } from "react-icons/io5";
 import { FaDiamond } from "react-icons/fa6";
-import type { editor } from "../shapes-types";
 
 interface SidebarProps {
   activeTool: ActiveTool;
   onChangeActiveTool: (tool: ActiveTool) => void;
-  editor: editor | undefined;
+  editor: Editor | undefined;
 }
 
 export default function shapesSidebar({
