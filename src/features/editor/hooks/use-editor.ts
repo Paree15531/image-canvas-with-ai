@@ -86,9 +86,6 @@ const buildEditor = ({
       });
       addToCanvas(triangle);
     },
-    filColor,
-    strokeColor,
-    strokeWidth,
     changeFillColor(val: string) {
       setFillColor(val);
       canvas.getActiveObjects().forEach((object) => {
@@ -112,6 +109,10 @@ const buildEditor = ({
         object.set({ strokeWidth: val });
       });
     },
+    filColor,
+    strokeColor,
+    strokeWidth,
+    canvas,
   };
 };
 

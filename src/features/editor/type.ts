@@ -36,12 +36,13 @@ export interface Editor {
   // setFillColor: (filColor: string) => void;
   // setStrokeColor: (strokeColor: string) => void;
   // setStrokeWidth: (strokeWidth: number) => void;
-  filColor: string;
-  strokeColor: string;
-  strokeWidth: number;
   changeFillColor: (val: string) => void;
   changeStrokeColor: (val: string) => void;
   changeStrokeWidth: (val: number) => void;
+  filColor: string;
+  strokeColor: string;
+  strokeWidth: number;
+  canvas: fabric.Canvas;
 }
 
 export const FILL_COLOR = "rgba(0,0,0,0)";
