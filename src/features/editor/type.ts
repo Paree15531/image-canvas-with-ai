@@ -81,5 +81,5 @@ export const SHAPE_TRIANGLE_ROTATE = {
   height: 100,
   fill: FILL_COLOR,
   stroke: STROKE_COLOR,
-  rotate: 180,
+  angle: 180,
 };

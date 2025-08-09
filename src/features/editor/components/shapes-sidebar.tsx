@@ -61,8 +61,6 @@ export default function shapesSidebar({
               Icon={IoTriangle}
               iconClassName="rotate-180"
             ></ShapeTool>
-
-            <ShapeTool onClick={() => {}} Icon={FaDiamond}></ShapeTool>
           </div>
         </ScrollArea>
         <ToolSiderbarClose

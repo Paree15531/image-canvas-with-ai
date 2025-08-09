@@ -40,7 +40,7 @@ export default function shapesSidebar({
 
         {/* 滚动区域，放置内容相关的东西 */}
         <ScrollArea className="p-2">
-          <ColorPicker></ColorPicker>
+          <ColorPicker onChange={onChange}></ColorPicker>
         </ScrollArea>
         <ToolSiderbarClose
           isHidden={activeTool === "fill"}
