@@ -1,22 +1,36 @@
 import { RefObject, useCallback, useMemo, useState } from "react";
 import { fabric } from "fabric";
 import { useAutoResize } from "./use-auto-resize";
-import { useRuler } from "../hooks/use-ruler";
+import { useCanvasEvents } from "@/features/editor/hooks/use-canvas-events";
 import {
-  CreateShapesMember,
+  Editor,
+  BuildEditorProps,
   SHAPE_CIRCLE,
   SHAPE_SQUARE,
   SHAPE_SQUARE_FULL,
   SHAPE_TRIANGLE,
   SHAPE_TRIANGLE_ROTATE,
-} from "../shapes-types";
+  FILL_COLOR,
+  STROKE_COLOR,
+  STROKE_WIDTH,
+} from "../type";
+
+import { isText } from "../utils";
 
 type InitProps = {
   initialContainer: RefObject<HTMLDivElement | null>;
   initialCanvas: fabric.Canvas | null;
 };
 
-const buildShapes = (canvas: fabric.Canvas): CreateShapesMember => {
+const buildEditor = ({
+  canvas,
+  filColor,
+  strokeColor,
+  strokeWidth,
+  setFillColor,
+  setStrokeColor,
+  setStrokeWidth,
+}: BuildEditorProps): Editor => {
   //设置新添加的元素在工作空间中居中
   const centerFabricObject = (objes: fabric.Object) => {
     const workspaceInstance = canvas
@@ -53,7 +67,7 @@ const buildShapes = (canvas: fabric.Canvas): CreateShapesMember => {
       });
       addToCanvas(square);
     },
-    //添加全屏正方形
+    //添加大号正方形
     addSquareFull() {
       const squareFull = new fabric.Rect({
         ...SHAPE_SQUARE_FULL,
@@ -71,6 +85,32 @@ const buildShapes = (canvas: fabric.Canvas): CreateShapesMember => {
         ...SHAPE_TRIANGLE_ROTATE,
       });
       addToCanvas(triangle);
+    },
+    filColor,
+    strokeColor,
+    strokeWidth,
+    changeFillColor(val: string) {
+      setFillColor(val);
+      canvas.getActiveObjects().forEach((object) => {
+        object.set({ fill: val });
+      });
+      canvas.requestRenderAll();
+    },
+    changeStrokeColor(val: string) {
+      setStrokeColor(val);
+      canvas.getActiveObjects().forEach((object) => {
+        if (isText(object.type)) {
+          object.set({ fill: val });
+          return;
+        }
+        object.set({ stroke: val });
+      });
+    },
+    changeStrokeWidth(val: number) {
+      setStrokeWidth(val);
+      canvas.getActiveObjects().forEach((object) => {
+        object.set({ strokeWidth: val });
+      });
     },
   };
 };
@@ -115,12 +155,24 @@ const settingFabricControlsStyle = () => {
 const useEditor = () => {
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const [containter, setContainer] = useState<HTMLDivElement | null>(null);
+  const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([]);
 
-  //创建一个useMemo钩子来创建工作空间的成员
-  //这里可以根据需要添加更多的成员或逻辑
-  const createShapesMember = useMemo(() => {
+  const [filColor, setFillColor] = useState<string>(FILL_COLOR);
+  const [strokeColor, setStrokeColor] = useState<string>(STROKE_COLOR);
+  const [strokeWidth, setStrokeWidth] = useState<number>(STROKE_WIDTH);
+
+  //创建工作空间中形状的成员，可以编辑样式
+  const editor = useMemo(() => {
     if (canvas) {
-      return buildShapes(canvas);
+      return buildEditor({
+        canvas,
+        filColor,
+        strokeColor,
+        strokeWidth,
+        setFillColor,
+        setStrokeColor,
+        setStrokeWidth,
+      });
     }
     return;
   }, [canvas]);
@@ -129,6 +181,12 @@ const useEditor = () => {
   useAutoResize({
     canvas,
     containter,
+  });
+
+  //设置canvas事件,获取当前在canvas画布中的活跃元素
+  useCanvasEvents({
+    canvas,
+    setSelectedObjects,
   });
 
   const init = useCallback(({ initialContainer, initialCanvas }: InitProps) => {
@@ -153,7 +211,8 @@ const useEditor = () => {
 
   return {
     init,
-    createShapesMember,
+    editor,
+    canvas,
   };
 };
 

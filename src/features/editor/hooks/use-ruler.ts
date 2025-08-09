@@ -21,9 +21,9 @@ function useRuler(container: HTMLDivElement | null) {
 
         myRuler = new window.ruler({
           container: container, // reference to DOM element to apply rulers on
-          rulerHeight: 20, // thickness of ruler
+          rulerHeight: 30, // thickness of ruler
           fontFamily: "arial", // font for points
-          fontSize: "7px",
+          fontSize: "10px",
           strokeStyle: "black",
           lineWidth: 1,
           enableMouseTracking: true,

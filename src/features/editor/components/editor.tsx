@@ -39,7 +39,7 @@ export default function Editor() {
 
   const editorCanvasRef = useRef<HTMLCanvasElement>(null);
   const workspaceRef = useRef<HTMLDivElement>(null);
-  const { init, createShapesMember } = useEditor();
+  const { init, editor, editorObjectsStyle, canvas } = useEditor();
 
   useLayoutEffect(() => {
     if (!editorCanvasRef.current) return;
@@ -75,12 +75,18 @@ export default function Editor() {
           onChangeActiveTool={onChangeActiveTool}
         />
         <ShapesSidebar
-          createShapesMember={createShapesMember}
+          editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
         />
         <main className="bg-muted flex-1 overflow-auto relative flex flex-col overflow-y-scroll">
-          <Toolbar />
+          <Toolbar
+            activeTool={activeTool}
+            canvas={canvas}
+            onChangeActiveTool={onChangeActiveTool}
+            editorObjectsStyle={editorObjectsStyle}
+            key={JSON.stringify(canvas?.getActiveObject())}
+          />
           <div
             className="flex-1 h-[cacl(100%-124px)] bg-muted relative"
             ref={workspaceRef}
