@@ -50,6 +50,8 @@ export interface BuildEditorProps {
   setStrokeColor: (strokeColor: string) => void;
   setStrokeWidth: (strokeWidth: number) => void;
   selectedObjects: fabric.Object[];
+  strokeDashArray: number[];
+  setStrokeDashArray: (strokeDashArray: number[]) => void;
 }
 
 //build返回类型定义
@@ -62,16 +64,19 @@ export interface Editor {
   changeFillColor: (val: string) => void;
   changeStrokeColor: (val: string) => void;
   changeStrokeWidth: (val: number) => void;
+  changeStrokeDashArray: (val: number[]) => void;
   filColor: string;
   strokeColor: string;
   strokeWidth: number;
   canvas: fabric.Canvas;
   selectedObjects: fabric.Object[];
+  strokeDashArray: number[];
 }
 
 export const FILL_COLOR = "rgba(0,0,0)";
 export const STROKE_COLOR = "rgba(0,0,0)";
 export const STROKE_WIDTH = 1;
+export const STROKE_DASH_ARRAY = [];
 
 export const SHAPE_CIRCLE = {
   radius: 150,

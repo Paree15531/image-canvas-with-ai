@@ -13,6 +13,7 @@ import {
   FILL_COLOR,
   STROKE_COLOR,
   STROKE_WIDTH,
+  STROKE_DASH_ARRAY,
 } from "../type";
 
 import { isText } from "../utils";
@@ -31,6 +32,8 @@ const buildEditor = ({
   setStrokeColor,
   setStrokeWidth,
   selectedObjects,
+  strokeDashArray,
+  setStrokeDashArray,
 }: BuildEditorProps): Editor => {
   //设置新添加的元素在工作空间中居中
   const centerFabricObject = (objes: fabric.Object) => {
@@ -58,8 +61,6 @@ const buildEditor = ({
     addCircle() {
       const circle = new fabric.Circle({
         ...SHAPE_CIRCLE,
-        fill: filColor,
-        stroke: strokeColor,
       });
       addToCanvas(circle);
     },
@@ -67,8 +68,6 @@ const buildEditor = ({
     addSquare() {
       const square = new fabric.Rect({
         ...SHAPE_SQUARE,
-        fill: filColor,
-        stroke: strokeColor,
       });
       addToCanvas(square);
     },
@@ -76,24 +75,18 @@ const buildEditor = ({
     addSquareFull() {
       const squareFull = new fabric.Rect({
         ...SHAPE_SQUARE_FULL,
-        fill: filColor,
-        stroke: strokeColor,
       });
       addToCanvas(squareFull);
     },
     addTriangle() {
       const triangle = new fabric.Triangle({
         ...SHAPE_TRIANGLE,
-        fill: filColor,
-        stroke: strokeColor,
       });
       addToCanvas(triangle);
     },
     addTriangleRotate() {
       const triangle = new fabric.Triangle({
         ...SHAPE_TRIANGLE_ROTATE,
-        fill: filColor,
-        stroke: strokeColor,
       });
       addToCanvas(triangle);
     },
@@ -122,11 +115,19 @@ const buildEditor = ({
       });
       canvas.requestRenderAll();
     },
+    changeStrokeDashArray(val: number[]) {
+      setStrokeDashArray(val);
+      canvas.getActiveObjects().forEach((object) => {
+        object.set({ strokeDashArray: val });
+      });
+      canvas.requestRenderAll();
+    },
     filColor,
     strokeColor,
     strokeWidth,
     canvas,
     selectedObjects,
+    strokeDashArray,
   };
 };
 
@@ -139,12 +140,15 @@ const createWorkSpace = (initialCanvas: fabric.Canvas) => {
     fill: "white",
     selectable: false,
     hasControls: false,
+    evented: true,
     shadow: new fabric.Shadow({
       color: "rgb(0,0,0,0.8)",
       blur: 10,
     }),
-  });
-
+  }) as fabric.Rect & {
+    isWorkArea: boolean;
+  };
+  workspace.isWorkArea = true;
   //将工作空间元素矩形添加至画布中，并且在画布中居中，并且设置为裁剪路径，canvas上的元素只在Rect中显示
   initialCanvas.add(workspace);
   initialCanvas.centerObject(workspace);
@@ -175,6 +179,8 @@ const useEditor = () => {
   const [filColor, setFillColor] = useState<string>(FILL_COLOR);
   const [strokeColor, setStrokeColor] = useState<string>(STROKE_COLOR);
   const [strokeWidth, setStrokeWidth] = useState<number>(STROKE_WIDTH);
+  const [strokeDashArray, setStrokeDashArray] =
+    useState<number[]>(STROKE_DASH_ARRAY);
 
   //创建工作空间中形状的成员，可以编辑样式
   const editor = useMemo(() => {
@@ -188,10 +194,19 @@ const useEditor = () => {
         setStrokeColor,
         setStrokeWidth,
         selectedObjects,
+        strokeDashArray,
+        setStrokeDashArray,
       });
     }
     return;
-  }, [canvas, filColor, strokeColor, strokeWidth, selectedObjects]);
+  }, [
+    canvas,
+    filColor,
+    strokeColor,
+    strokeWidth,
+    selectedObjects,
+    strokeDashArray,
+  ]);
 
   //监听元素大小变化，自适应并居中工作空间元素
   useAutoResize({
@@ -214,14 +229,6 @@ const useEditor = () => {
       settingFabricControlsStyle();
       setCanvas(initialCanvas);
       setContainer(initialContainer.current);
-
-      const testRect = new fabric.Rect({
-        width: 100,
-        height: 100,
-        fill: "black",
-      });
-      initialCanvas.add(testRect);
-      initialCanvas.centerObject(testRect);
     }
   }, []);
 

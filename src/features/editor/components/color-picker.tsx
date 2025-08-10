@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { use, useEffect } from "react";
 import { ChromePicker, CirclePicker, ColorResult } from "react-color";
 import { colors, Editor } from "../type";
 import { rabaObjectToString } from "../utils";
@@ -7,9 +7,14 @@ import { rabaObjectToString } from "../utils";
 interface ColorPickerProps {
   onChange: (value: string) => void;
   editor?: Editor;
+  colorType: keyof fabric.Object; // 'fill' or 'stroke'
 }
 
-export default function ColorPicker({ onChange, editor }: ColorPickerProps) {
+export default function ColorPicker({
+  onChange,
+  editor,
+  colorType,
+}: ColorPickerProps) {
   const handleChromeChange = (color: ColorResult) => {
     const rgbaString = rabaObjectToString(color.rgb);
     onChange(rgbaString);
@@ -22,12 +27,17 @@ export default function ColorPicker({ onChange, editor }: ColorPickerProps) {
 
   //获取选中元素的fill颜色并在调色板正确回显
   const fillColor =
-    editor && (editor?.canvas.getActiveObject()?.get("fill") as string);
+    editor && (editor?.canvas.getActiveObject()?.get(colorType) as string);
 
   return (
     <div>
-      <ChromePicker color={fillColor} onChangeComplete={handleChromeChange} />
+      <ChromePicker
+        key={colorType}
+        color={fillColor}
+        onChangeComplete={handleChromeChange}
+      />
       <CirclePicker
+        key={colorType}
         color={fillColor}
         colors={colors}
         onChange={handleCircleChange}

@@ -1,13 +1,7 @@
 "use client";
 import { fabric } from "fabric";
 import { useEditor } from "@/features/editor/hooks/use-editor";
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import Navbar from "./navbar";
 import Sidebar from "./sidebar";
 import Toolbar from "./toolbar";
@@ -17,6 +11,8 @@ import ShapesSidebar from "./shapes-sidebar";
 import { useRuler } from "../hooks/use-ruler";
 import { useAlignGuidelines } from "../hooks/use-align-guidelines";
 import FillColorSideBar from "./fill-color-sidebar";
+import StrokeColorSidebar from "./stroke-color-sidebar";
+import StrokeWidthSidebar from "./stroke-width-sidebar";
 
 export default function Editor() {
   //声明工具选中的类型
@@ -55,17 +51,10 @@ export default function Editor() {
       initialCanvas: fabricCanvas,
       initialContainer: workspaceRef,
     });
-
     return () => {
       fabricCanvas.dispose();
     };
   }, [init]);
-
-  // useEffect(() => {
-  //   if (workspaceRef?.current) {
-  //     useRuler(workspaceRef.current);
-  //   }
-  // }, []);
 
   return (
     <div className="h-full flex flex-col">
@@ -85,6 +74,17 @@ export default function Editor() {
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
         ></FillColorSideBar>
+        <StrokeColorSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        ></StrokeColorSidebar>
+        <StrokeWidthSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        ></StrokeWidthSidebar>
+        {/* 主工作区 */}
         <main className="bg-muted flex-1  relative flex flex-col overflow-scroll scrollbar-hide ">
           <Toolbar
             activeTool={activeTool}
