@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import type { ActiveTool, Editor } from "../type";
 import { cn } from "@/lib/utils";
 import ToolSiderHeader from "./tool-sidebar-header";
@@ -43,10 +43,7 @@ export default function shapesSidebar({
         {/* 滚动区域，放置内容相关的东西 */}
         <ScrollArea className="h-full">
           <div className="p-2">
-            <ColorPicker
-              value={editor?.filColor}
-              onChange={onChange}
-            ></ColorPicker>
+            <ColorPicker editor={editor} onChange={onChange}></ColorPicker>
           </div>
         </ScrollArea>
         <ToolSiderbarClose
