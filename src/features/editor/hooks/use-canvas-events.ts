@@ -11,7 +11,7 @@ export const useCanvasEvents = ({
 }: UseCanvasEventsProps) => {
   useEffect(() => {
     if (!canvas) return;
-    canvas.on("selection:cleared", (e) => {
+    canvas.on("selection:created", (e) => {
       setSelectedObjects(e.selected || []);
     });
     canvas.on("selection:updated", (e) => {
@@ -19,6 +19,7 @@ export const useCanvasEvents = ({
     });
     canvas.on("canvas:cleared", () => {
       setSelectedObjects([]);
+      console.log("Canvas cleared, selected objects reset.");
     });
     return () => {
       if (canvas) {

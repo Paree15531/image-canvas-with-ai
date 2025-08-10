@@ -25,6 +25,12 @@ export default function toolbar({
   };
   const fillColor = getActiveProperty("fill");
 
+  if (editor?.selectedObjects.length === 0) {
+    return (
+      <div className="shrink-0 w-full h-[56px] overflow-x-auto border-b bg-white flex items-center p-2 z-[49] gap-x-2"></div>
+    );
+  }
+
   return (
     <div className="shrink-0 w-full h-[56px] overflow-x-auto border-b bg-white flex items-center p-2 z-[49] gap-x-2">
       <div className="flex items-center h-full justify-center">
@@ -38,8 +44,7 @@ export default function toolbar({
             <div
               className=" rounded-[3px] size-4"
               style={{
-                backgroundColor:
-                  typeof fillColor === "string" ? fillColor : "black",
+                backgroundColor: fillColor || "black",
               }}
             ></div>
           </Button>

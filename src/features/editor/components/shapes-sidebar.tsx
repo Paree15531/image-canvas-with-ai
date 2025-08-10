@@ -7,7 +7,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import ShapeTool from "./shape-tool";
 import { FaCircle, FaSquare, FaSquareFull } from "react-icons/fa";
 import { IoTriangle } from "react-icons/io5";
-import { FaDiamond } from "react-icons/fa6";
 
 interface SidebarProps {
   activeTool: ActiveTool;
@@ -23,8 +22,8 @@ export default function shapesSidebar({
   return (
     <aside
       className={cn(
-        "bg-white relative h-full flex flex-col z-[40] border-r transition-all duration-200",
-        activeTool === "shapes" ? "w-[360px]" : "w-[0px]"
+        "bg-white relative h-full flex flex-col   transition-all duration-200",
+        activeTool === "shapes" ? "w-[360px] border-r" : "w-[0px]"
       )}
     >
       <div
@@ -39,7 +38,7 @@ export default function shapesSidebar({
 
         {/* 滚动区域，放置内容相关的东西 */}
         <ScrollArea>
-          <div className=" grid grid-cols-3 gap-4 p-4">
+          <div className="grid grid-cols-3 gap-4 p-4 w-full">
             <ShapeTool
               onClick={() => editor?.addCircle()}
               Icon={FaCircle}

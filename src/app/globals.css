@@ -12,12 +12,12 @@ body {
   top: 0;
 }
 
-.rul_ruler {
+/* .rul_ruler {
   z-index: 0 !important;
 }
 .rul_corner {
   z-index: 0 !important;
-}
+} */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -133,5 +133,28 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+.chrome-picker {
+  width: 100% !important;
+  box-shadow: none !important;
+  border-radius: 6px !important;
+}
+.circle-picker {
+  width: 100% !important;
+  box-shadow: none !important;
+  border-radius: 6px !important;
+}
+@layer utilities {
+  /* 隐藏滚动条 - Webkit 浏览器 */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* 隐藏滚动条 - Firefox */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 }

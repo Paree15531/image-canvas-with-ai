@@ -85,12 +85,12 @@ export default function Editor() {
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
         ></FillColorSideBar>
-        <main className="bg-muted flex-1 overflow-auto relative flex flex-col overflow-y-scroll">
+        <main className="bg-muted flex-1  relative flex flex-col overflow-scroll scrollbar-hide ">
           <Toolbar
             activeTool={activeTool}
             onChangeActiveTool={onChangeActiveTool}
             editor={editor}
-            key={JSON.stringify(editor?.canvas.getActiveObject())}
+            key={JSON.stringify(editor && editor.canvas.getActiveObject())}
           />
           <div
             className="flex-1 h-[cacl(100%-124px)] bg-muted relative"

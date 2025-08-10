@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import type { ActiveTool, Editor } from "../type";
 import { cn } from "@/lib/utils";
@@ -24,8 +26,8 @@ export default function shapesSidebar({
   return (
     <aside
       className={cn(
-        "bg-white relative h-full flex flex-col z-[40] border-r transition-all duration-200",
-        activeTool === "fill" ? "w-[360px]" : "w-[0px]"
+        "bg-white relative h-full flex flex-col  transition-all duration-200",
+        activeTool === "fill" ? "w-[360px] border-r" : "w-[0px] "
       )}
     >
       <div
@@ -39,8 +41,13 @@ export default function shapesSidebar({
         <ToolSiderHeader title="填充颜色" desc="选择一个元素来修改他的填充色" />
 
         {/* 滚动区域，放置内容相关的东西 */}
-        <ScrollArea className="p-2">
-          <ColorPicker onChange={onChange}></ColorPicker>
+        <ScrollArea className="h-full">
+          <div className="p-2">
+            <ColorPicker
+              value={editor?.filColor}
+              onChange={onChange}
+            ></ColorPicker>
+          </div>
         </ScrollArea>
         <ToolSiderbarClose
           isHidden={activeTool === "fill"}

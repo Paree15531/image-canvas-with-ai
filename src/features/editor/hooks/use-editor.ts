@@ -30,6 +30,7 @@ const buildEditor = ({
   setFillColor,
   setStrokeColor,
   setStrokeWidth,
+  selectedObjects,
 }: BuildEditorProps): Editor => {
   //设置新添加的元素在工作空间中居中
   const centerFabricObject = (objes: fabric.Object) => {
@@ -57,6 +58,8 @@ const buildEditor = ({
     addCircle() {
       const circle = new fabric.Circle({
         ...SHAPE_CIRCLE,
+        fill: filColor,
+        stroke: strokeColor,
       });
       addToCanvas(circle);
     },
@@ -64,6 +67,8 @@ const buildEditor = ({
     addSquare() {
       const square = new fabric.Rect({
         ...SHAPE_SQUARE,
+        fill: filColor,
+        stroke: strokeColor,
       });
       addToCanvas(square);
     },
@@ -71,18 +76,24 @@ const buildEditor = ({
     addSquareFull() {
       const squareFull = new fabric.Rect({
         ...SHAPE_SQUARE_FULL,
+        fill: filColor,
+        stroke: strokeColor,
       });
       addToCanvas(squareFull);
     },
     addTriangle() {
       const triangle = new fabric.Triangle({
         ...SHAPE_TRIANGLE,
+        fill: filColor,
+        stroke: strokeColor,
       });
       addToCanvas(triangle);
     },
     addTriangleRotate() {
       const triangle = new fabric.Triangle({
         ...SHAPE_TRIANGLE_ROTATE,
+        fill: filColor,
+        stroke: strokeColor,
       });
       addToCanvas(triangle);
     },
@@ -102,17 +113,20 @@ const buildEditor = ({
         }
         object.set({ stroke: val });
       });
+      canvas.requestRenderAll();
     },
     changeStrokeWidth(val: number) {
       setStrokeWidth(val);
       canvas.getActiveObjects().forEach((object) => {
         object.set({ strokeWidth: val });
       });
+      canvas.requestRenderAll();
     },
     filColor,
     strokeColor,
     strokeWidth,
     canvas,
+    selectedObjects,
   };
 };
 
@@ -173,10 +187,11 @@ const useEditor = () => {
         setFillColor,
         setStrokeColor,
         setStrokeWidth,
+        selectedObjects,
       });
     }
     return;
-  }, [canvas]);
+  }, [canvas, filColor, strokeColor, strokeWidth, selectedObjects]);
 
   //监听元素大小变化，自适应并居中工作空间元素
   useAutoResize({
