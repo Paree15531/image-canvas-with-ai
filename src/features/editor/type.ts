@@ -52,6 +52,8 @@ export interface BuildEditorProps {
   selectedObjects: fabric.Object[];
   strokeDashArray: number[];
   setStrokeDashArray: (strokeDashArray: number[]) => void;
+  opacity: number;
+  setOpacity: (opacity: number) => void;
 }
 
 //build返回类型定义
@@ -71,12 +73,16 @@ export interface Editor {
   canvas: fabric.Canvas;
   selectedObjects: fabric.Object[];
   strokeDashArray: number[];
+  objectBringToFront: () => void;
+  objectSendToBack: () => void;
+  changeOpacity: (val: number) => void;
 }
 
 export const FILL_COLOR = "rgba(0,0,0)";
 export const STROKE_COLOR = "rgba(0,0,0)";
 export const STROKE_WIDTH = 1;
 export const STROKE_DASH_ARRAY = [];
+export const OPACTIY = 1;
 
 export const SHAPE_CIRCLE = {
   radius: 150,

@@ -14,6 +14,7 @@ import {
   STROKE_COLOR,
   STROKE_WIDTH,
   STROKE_DASH_ARRAY,
+  OPACTIY,
 } from "../type";
 
 import { isText } from "../utils";
@@ -34,6 +35,8 @@ const buildEditor = ({
   selectedObjects,
   strokeDashArray,
   setStrokeDashArray,
+  opacity,
+  setOpacity,
 }: BuildEditorProps): Editor => {
   //设置新添加的元素在工作空间中居中
   const centerFabricObject = (objes: fabric.Object) => {
@@ -58,6 +61,30 @@ const buildEditor = ({
   };
 
   return {
+    changeOpacity(val: number) {
+      setOpacity(val);
+      const activeObjects = canvas.getActiveObjects();
+      activeObjects.forEach((object) => {
+        object.set({ opacity: val });
+      });
+      canvas.requestRenderAll();
+    },
+    objectBringToFront() {
+      const activeObjects = canvas.getActiveObjects();
+      activeObjects.forEach((object) => {
+        canvas.bringToFront(object);
+      });
+    },
+    objectSendToBack() {
+      const activeObject = canvas.getActiveObjects();
+      activeObject.forEach((object) => {
+        canvas.sendToBack(object);
+        const workspaceInstance = canvas
+          .getObjects()
+          .find((object) => object.name === "workspace") as fabric.Rect;
+        canvas.sendToBack(workspaceInstance);
+      });
+    },
     addCircle() {
       const circle = new fabric.Circle({
         ...SHAPE_CIRCLE,
@@ -181,6 +208,7 @@ const useEditor = () => {
   const [strokeWidth, setStrokeWidth] = useState<number>(STROKE_WIDTH);
   const [strokeDashArray, setStrokeDashArray] =
     useState<number[]>(STROKE_DASH_ARRAY);
+  const [opacity, setOpacity] = useState<number>(OPACTIY);
 
   //创建工作空间中形状的成员，可以编辑样式
   const editor = useMemo(() => {
@@ -196,6 +224,8 @@ const useEditor = () => {
         selectedObjects,
         strokeDashArray,
         setStrokeDashArray,
+        opacity,
+        setOpacity,
       });
     }
     return;
@@ -206,6 +236,7 @@ const useEditor = () => {
     strokeWidth,
     selectedObjects,
     strokeDashArray,
+    opacity,
   ]);
 
   //监听元素大小变化，自适应并居中工作空间元素

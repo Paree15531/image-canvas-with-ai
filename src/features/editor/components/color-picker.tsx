@@ -31,13 +31,8 @@ export default function ColorPicker({
 
   return (
     <div>
-      <ChromePicker
-        key={colorType}
-        color={fillColor}
-        onChangeComplete={handleChromeChange}
-      />
+      <ChromePicker color={fillColor} onChangeComplete={handleChromeChange} />
       <CirclePicker
-        key={colorType}
         color={fillColor}
         colors={colors}
         onChange={handleCircleChange}

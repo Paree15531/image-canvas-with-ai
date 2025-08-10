@@ -5,6 +5,8 @@ import HintTooltip from "../components/hintTooltip";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { BsBorderWidth } from "react-icons/bs";
+import { ArrowDown, ArrowUp } from "lucide-react";
+import { RxTransparencyGrid } from "react-icons/rx";
 
 interface ToolbarProps {
   activeTool: ActiveTool;
@@ -81,6 +83,40 @@ export default function toolbar({
             className={cn(activeTool === "stroke-width" && "bg-gray-200")}
           >
             <BsBorderWidth></BsBorderWidth>
+          </Button>
+        </HintTooltip>
+      </div>
+      <div className="flex items-center h-full justify-center">
+        <HintTooltip label="层叠提升" side="bottom" sideOffset={5}>
+          <Button
+            onClick={() => editor?.objectBringToFront()}
+            variant={"ghost"}
+            size="icon"
+          >
+            <ArrowUp></ArrowUp>
+          </Button>
+        </HintTooltip>
+      </div>
+      <div className="flex items-center h-full justify-center">
+        <HintTooltip label="层叠回退" side="bottom" sideOffset={5}>
+          <Button
+            onClick={() => editor?.objectSendToBack()}
+            variant={"ghost"}
+            size="icon"
+          >
+            <ArrowDown></ArrowDown>
+          </Button>
+        </HintTooltip>
+      </div>
+      <div className="flex items-center h-full justify-center">
+        <HintTooltip label="透明度" side="bottom" sideOffset={5}>
+          <Button
+            onClick={() => onChangeActiveTool("opacity")}
+            variant={"ghost"}
+            size="icon"
+            className={cn(activeTool === "opacity" && "bg-gray-200")}
+          >
+            <RxTransparencyGrid className="size-4"></RxTransparencyGrid>
           </Button>
         </HintTooltip>
       </div>

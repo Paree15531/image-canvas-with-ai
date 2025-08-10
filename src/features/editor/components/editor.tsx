@@ -13,6 +13,7 @@ import { useAlignGuidelines } from "../hooks/use-align-guidelines";
 import FillColorSideBar from "./fill-color-sidebar";
 import StrokeColorSidebar from "./stroke-color-sidebar";
 import StrokeWidthSidebar from "./stroke-width-sidebar";
+import OpacitySidebar from "./opacity-sidebar";
 
 export default function Editor() {
   //声明工具选中的类型
@@ -84,6 +85,11 @@ export default function Editor() {
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
         ></StrokeWidthSidebar>
+        <OpacitySidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        ></OpacitySidebar>
         {/* 主工作区 */}
         <main className="bg-muted flex-1  relative flex flex-col overflow-scroll scrollbar-hide ">
           <Toolbar
