@@ -1,8 +1,20 @@
 "use client";
-import React, { use, useEffect } from "react";
-import { ChromePicker, CirclePicker, ColorResult } from "react-color";
-import { colors, Editor } from "../type";
+import React from "react";
+import { ColorResult } from "react-color";
+import { colors, Editor, FILL_COLOR } from "../type";
 import { rabaObjectToString } from "../utils";
+import dynamic from "next/dynamic";
+
+//由于react-color包在服务端渲染会存在水和错误，所以强制客服端渲染，禁用ssr
+const ChromePicker = dynamic(
+  () => import("react-color").then((mod) => mod.ChromePicker),
+  { ssr: false }
+);
+
+const CirclePicker = dynamic(
+  () => import("react-color").then((mod) => mod.CirclePicker),
+  { ssr: false }
+);
 
 interface ColorPickerProps {
   onChange: (value: string) => void;
@@ -27,7 +39,8 @@ export default function ColorPicker({
 
   //获取选中元素的fill颜色并在调色板正确回显
   const fillColor =
-    editor && (editor?.canvas.getActiveObject()?.get(colorType) as string);
+    (editor && (editor?.canvas.getActiveObject()?.get(colorType) as string)) ||
+    FILL_COLOR;
 
   return (
     <div>

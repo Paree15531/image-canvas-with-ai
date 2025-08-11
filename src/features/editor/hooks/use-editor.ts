@@ -15,6 +15,8 @@ import {
   STROKE_WIDTH,
   STROKE_DASH_ARRAY,
   OPACTIY,
+  TEXT_OPTIONS,
+  fontFamilyType,
 } from "../type";
 
 import { isText } from "../utils";
@@ -37,6 +39,8 @@ const buildEditor = ({
   setStrokeDashArray,
   opacity,
   setOpacity,
+  fontFamily,
+  setFontFamily,
 }: BuildEditorProps): Editor => {
   //设置新添加的元素在工作空间中居中
   const centerFabricObject = (objes: fabric.Object) => {
@@ -61,6 +65,27 @@ const buildEditor = ({
   };
 
   return {
+    changeTextFontFamily: (key, val) => {
+      setFontFamily(key);
+      const activeObjects = canvas.getActiveObjects();
+      activeObjects.forEach((object) => {
+        if (isText(object.type)) {
+          //@ts-ignore
+          object.set({ fontFamily: val });
+        }
+      });
+      canvas.requestRenderAll();
+    },
+    //添加文本
+    addText(text, options) {
+      const textObject = new fabric.Textbox(text, {
+        ...TEXT_OPTIONS,
+        fontFamily: fontFamily,
+        ...options,
+      });
+      addToCanvas(textObject);
+      canvas.requestRenderAll();
+    },
     changeOpacity(val: number) {
       setOpacity(val);
       const activeObjects = canvas.getActiveObjects();
@@ -155,6 +180,7 @@ const buildEditor = ({
     canvas,
     selectedObjects,
     strokeDashArray,
+    fontFamily,
   };
 };
 
@@ -209,6 +235,7 @@ const useEditor = () => {
   const [strokeDashArray, setStrokeDashArray] =
     useState<number[]>(STROKE_DASH_ARRAY);
   const [opacity, setOpacity] = useState<number>(OPACTIY);
+  const [fontFamily, setFontFamily] = useState<string>("微软雅黑");
 
   //创建工作空间中形状的成员，可以编辑样式
   const editor = useMemo(() => {
@@ -226,6 +253,8 @@ const useEditor = () => {
         setStrokeDashArray,
         opacity,
         setOpacity,
+        fontFamily,
+        setFontFamily,
       });
     }
     return;
@@ -237,6 +266,7 @@ const useEditor = () => {
     selectedObjects,
     strokeDashArray,
     opacity,
+    fontFamily,
   ]);
 
   //监听元素大小变化，自适应并居中工作空间元素

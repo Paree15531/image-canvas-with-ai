@@ -14,6 +14,8 @@ import FillColorSideBar from "./fill-color-sidebar";
 import StrokeColorSidebar from "./stroke-color-sidebar";
 import StrokeWidthSidebar from "./stroke-width-sidebar";
 import OpacitySidebar from "./opacity-sidebar";
+import TextSidebar from "./text-sidebar";
+import FontSidebar from "./font-sidebar";
 
 export default function Editor() {
   //声明工具选中的类型
@@ -90,6 +92,16 @@ export default function Editor() {
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
         ></OpacitySidebar>
+        <TextSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        ></TextSidebar>
+        <FontSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        ></FontSidebar>
         {/* 主工作区 */}
         <main className="bg-muted flex-1  relative flex flex-col overflow-scroll scrollbar-hide ">
           <Toolbar
